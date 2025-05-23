@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import SidebarItems from "./components/SidebarItems";
 import Header from "./components/Header";
+import ChatUI from "./components/ChatUi";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -12,12 +13,16 @@ export default async function Home() {
 
       <div className="w-full">
         <Header />
-        <div className="p-4">
-          <h1 className="text-3xl font-bold text-center">
-            Hello {data?.user?.user_metadata?.full_name || "World"}!
-          </h1>
-        </div>
+        <section className="flex">
+          <ChatUI />
+          <ChatUI />
+          <div className="border-l">
+            <SidebarItems />
+          </div>
+        </section>
       </div>
+
+      <div className="border-l"></div>
     </section>
   );
 }

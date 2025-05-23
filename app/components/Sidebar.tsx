@@ -8,7 +8,6 @@ interface SidebarItemProps {
   icon: IconType;
   text: string;
   active?: boolean;
-  alert?: boolean;
 }
 
 const SidebarContext = createContext<{
@@ -72,7 +71,6 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   icon: Icon,
   text,
   active,
-  alert,
 }) => {
   const { expanded } = useContext(SidebarContext);
 
@@ -95,14 +93,6 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       >
         {text}
       </span>
-      {alert && (
-        <div
-          className={`absolute right-2 w-2 h-2 rounded bg-green-400 ${
-            expanded ? "" : "top-2"
-          }`}
-        ></div>
-      )}
-
       {!expanded && (
         <div
           className={`

@@ -13,7 +13,7 @@ import { IoIosSettings } from "react-icons/io";
 
 const sidebarItems = [
   { icon: AiFillHome, text: "Home", active: true },
-  { icon: BsChatDotsFill, text: "Chats", alert: true },
+  { icon: BsChatDotsFill, text: "Chats" },
   { icon: IoTicket, text: "Ticket" },
   { icon: GoGraph, text: "Analytics" },
   { icon: IoListSharp, text: "Lists" },
@@ -30,12 +30,7 @@ const SidebarItems = () => {
     <Sidebar>
       {sidebarItems.map((item, index) => (
         <React.Fragment key={index}>
-          <SidebarItem
-            icon={item.icon}
-            text={item.text}
-            active={item.active}
-            alert={item.alert}
-          />
+          <SidebarItem icon={item.icon} text={item.text} active={item.active} />
           {/* Add a border between items */}
           {(item.text === "Home" ||
             item.text === "Analytics" ||
