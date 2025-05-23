@@ -1,13 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import React, { createContext, useContext, useState } from "react";
 import { IconType } from "react-icons";
 import { TbLayoutSidebarLeftExpandFilled, TbStarsFilled } from "react-icons/tb";
+import { UrlObject } from "url";
 
 interface SidebarItemProps {
   icon: IconType;
   text: string;
   active?: boolean;
+  href: string | UrlObject;
 }
 
 const SidebarContext = createContext<{
@@ -71,38 +74,41 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   icon: Icon,
   text,
   active,
+  href,
 }) => {
   const { expanded } = useContext(SidebarContext);
 
   return (
-    <li
-      className={`
+    <Link href={href}>
+      <li
+        className={`
         relative flex items-center p-2 my-1 
         font-medium rounded-md cursor-pointer 
         transition-colors group ${active ? "bg-gray-200 " : "hover:bg-gray-100"}
         `}
-    >
-      <Icon
-        size="1.5em"
-        className={`text-gray-600 ${active ? "text-green-700" : ""}`}
-      />
-      <span
-        className={`overflow-hidden transition-all text-sm ${
-          expanded ? "w-36 ml-1.5" : "w-0"
-        }`}
       >
-        {text}
-      </span>
-      {!expanded && (
-        <div
-          className={`
-          absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-        `}
+        <Icon
+          size="1.5em"
+          className={`text-gray-600 ${active ? "text-green-700" : ""}`}
+        />
+        <span
+          className={`overflow-hidden transition-all text-sm ${
+            expanded ? "w-36 ml-1.5" : "w-0"
+          }`}
         >
           {text}
-        </div>
-      )}
-    </li>
+        </span>
+        {!expanded && (
+          <div
+            className={`
+          absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+        `}
+          >
+            {text}
+          </div>
+        )}
+      </li>
+    </Link>
   );
 };
 

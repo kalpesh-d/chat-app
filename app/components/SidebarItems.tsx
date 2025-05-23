@@ -12,17 +12,17 @@ import { MdChecklist } from "react-icons/md";
 import { IoIosSettings } from "react-icons/io";
 
 const sidebarItems = [
-  { icon: AiFillHome, text: "Home", active: true },
-  { icon: BsChatDotsFill, text: "Chats" },
-  { icon: IoTicket, text: "Ticket" },
-  { icon: GoGraph, text: "Analytics" },
-  { icon: IoListSharp, text: "Lists" },
-  { icon: HiMegaphone, text: "Announcements" },
-  { icon: TiFlowMerge, text: "Connections" },
-  { icon: RiContactsBookFill, text: "Contacts" },
-  { icon: RiFolderImageFill, text: "Gallery" },
-  { icon: MdChecklist, text: "Checklist" },
-  { icon: IoIosSettings, text: "Settings" },
+  { icon: AiFillHome, text: "Home", active: true, href: "/" },
+  { icon: BsChatDotsFill, text: "Chats", href: "/" },
+  { icon: IoTicket, text: "Ticket", href: "/" },
+  { icon: GoGraph, text: "Analytics", href: "/" },
+  { icon: IoListSharp, text: "Lists", href: "/" },
+  { icon: HiMegaphone, text: "Announcements", href: "/" },
+  { icon: TiFlowMerge, text: "Connections", href: "/connections" },
+  { icon: RiContactsBookFill, text: "Contacts", href: "/" },
+  { icon: RiFolderImageFill, text: "Gallery", href: "/" },
+  { icon: MdChecklist, text: "Checklist", href: "/" },
+  { icon: IoIosSettings, text: "Settings", href: "/" },
 ];
 
 const SidebarItems = () => {
@@ -30,7 +30,12 @@ const SidebarItems = () => {
     <Sidebar>
       {sidebarItems.map((item, index) => (
         <React.Fragment key={index}>
-          <SidebarItem icon={item.icon} text={item.text} active={item.active} />
+          <SidebarItem
+            icon={item.icon}
+            text={item.text}
+            active={item.active}
+            href={item.href}
+          />
           {/* Add a border between items */}
           {(item.text === "Home" ||
             item.text === "Analytics" ||
