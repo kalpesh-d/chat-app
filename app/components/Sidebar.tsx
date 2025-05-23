@@ -24,7 +24,7 @@ const Sidebar = ({
   const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
-    <aside className="h-screen">
+    <aside>
       <nav className="h-full flex flex-col border-r border-gray-200">
         <div className="p-3">
           {expanded ? (
