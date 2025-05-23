@@ -1,37 +1,67 @@
-import Image from "next/image";
+"use client";
+
+import React, { createContext, useContext, useState } from "react";
+import { IconType } from "react-icons";
 import { TbLayoutSidebarLeftExpandFilled, TbStarsFilled } from "react-icons/tb";
 
 interface SidebarItemProps {
-  icon: React.ReactNode;
+  icon: IconType;
   text: string;
   active?: boolean;
   alert?: boolean;
 }
+
+const SidebarContext = createContext<{
+  expanded: boolean;
+}>({
+  expanded: false,
+});
 
 const Sidebar = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const [expanded, setExpanded] = useState<boolean>(false);
+
   return (
     <aside className="h-screen">
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-        <div className="p-4 pb-2 flex justify-between items-center">
-          <Image
-            src="https://framerusercontent.com/images/ywGyuWgLKzqyB4QJ1sw5Nk1mckU.svg"
-            width="200"
-            height="200"
-            alt="Logo"
-          />
+      <nav className="h-full flex flex-col shadow-sm">
+        <div className="p-3">
+          {expanded ? (
+            <img
+              src="https://framerusercontent.com/images/tdWwUszhJMqsOqrcL8RyRsD0r8s.png"
+              alt="Logo"
+              className="w-auto h-8.5 transition-all duration-300"
+            />
+          ) : (
+            <img src="/periskope.svg" alt="Logo" className="w-auto h-8" />
+          )}
         </div>
-        <ul className="flex-1 px-3">{children}</ul>
-        <div className="flex flex-col gap-4 p-3">
-          <TbStarsFilled size="1.5em" className="text-gray-600" />
 
-          <TbLayoutSidebarLeftExpandFilled
+        <SidebarContext.Provider value={{ expanded }}>
+          <ul className="flex-1 p-2">{children}</ul>
+        </SidebarContext.Provider>
+
+        <div className="flex flex-col gap-y-4 px-3 py-2">
+          <TbStarsFilled
             size="1.5em"
-            className="text-gray-600"
+            className="text-gray-600 cursor-pointer"
           />
+
+          <button onClick={() => setExpanded(!expanded)}>
+            {expanded ? (
+              <TbLayoutSidebarLeftExpandFilled
+                size="1.5em"
+                className="text-gray-600 cursor-pointer"
+              />
+            ) : (
+              <TbLayoutSidebarLeftExpandFilled
+                size="1.5em"
+                className="text-gray-600 cursor-pointer rotate-180"
+              />
+            )}
+          </button>
         </div>
       </nav>
     </aside>
@@ -39,15 +69,49 @@ const Sidebar = ({
 };
 
 export const SidebarItem: React.FC<SidebarItemProps> = ({
-  icon,
+  icon: Icon,
   text,
   active,
   alert,
 }) => {
+  const { expanded } = useContext(SidebarContext);
+
   return (
-    <li className="flex items-center">
-      {icon}
-      <span>{text}</span>
+    <li
+      className={`
+        relative flex items-center p-2 my-1 
+        font-medium rounded-md cursor-pointer 
+        transition-colors group ${active ? "bg-gray-200 " : "hover:bg-gray-100"}
+        `}
+    >
+      <Icon
+        size="1.5em"
+        className={`text-gray-600 ${active ? "text-green-700" : ""}`}
+      />
+      <span
+        className={`overflow-hidden transition-all text-sm ${
+          expanded ? "w-36 ml-1.5" : "w-0"
+        }`}
+      >
+        {text}
+      </span>
+      {alert && (
+        <div
+          className={`absolute right-2 w-2 h-2 rounded bg-green-400 ${
+            expanded ? "" : "top-2"
+          }`}
+        ></div>
+      )}
+
+      {!expanded && (
+        <div
+          className={`
+          absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+        `}
+        >
+          {text}
+        </div>
+      )}
     </li>
   );
 };
