@@ -41,7 +41,7 @@ export function AddUserChat({
 
   return (
     <div className="p-4 rounded w-full mx-auto">
-      <h2 className="text-lg font-semibold mb-2">Start a Chat</h2>
+      <h2 className="text-lg font-semibold mb-2">Start a User</h2>
       <div className="flex gap-2 mb-4 w-md">
         <input
           type="text"
@@ -68,7 +68,7 @@ export function AddUserChat({
             <li
               key={user.id}
               onClick={() => handleSelect(user.id)}
-              className="cursor-pointer p-2 border border-gray-300 rounded hover:bg-gray-100 focus:outline-0 w-md"
+              className="cursor-pointer p-2 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-0 w-md"
             >
               <div className="flex items-center">
                 <Image

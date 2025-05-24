@@ -27,18 +27,10 @@ const Sidebar = ({
   const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
-    <aside>
+    <aside className="h-screen">
       <nav className="h-full flex flex-col border-r border-gray-200">
         <div className="p-3">
-          {expanded ? (
-            <img
-              src="https://framerusercontent.com/images/tdWwUszhJMqsOqrcL8RyRsD0r8s.png"
-              alt="Logo"
-              className="w-auto h-8.5 transition-all duration-300"
-            />
-          ) : (
-            <img src="/periskope.svg" alt="Logo" className="w-auto h-8" />
-          )}
+          <img src="/periskope.svg" alt="Logo" className="h-8" />
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
@@ -47,19 +39,19 @@ const Sidebar = ({
 
         <div className="flex flex-col gap-y-4 px-3 py-2">
           <TbStarsFilled
-            size="1.5em"
+            size="1.3em"
             className="text-gray-600 cursor-pointer"
           />
 
           <button onClick={() => setExpanded(!expanded)}>
             {expanded ? (
               <TbLayoutSidebarLeftExpandFilled
-                size="1.5em"
+                size="1.3em"
                 className="text-gray-600 cursor-pointer"
               />
             ) : (
               <TbLayoutSidebarLeftExpandFilled
-                size="1.5em"
+                size="1.3em"
                 className="text-gray-600 cursor-pointer rotate-180"
               />
             )}
@@ -88,12 +80,12 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
         `}
       >
         <Icon
-          size="1.5em"
+          size="1.3em"
           className={`text-gray-600 ${active ? "text-green-700" : ""}`}
         />
         <span
           className={`overflow-hidden transition-all text-sm ${
-            expanded ? "w-36 ml-1.5" : "w-0"
+            expanded ? "w-30 ml-1.5" : "w-0"
           }`}
         >
           {text}

@@ -6,7 +6,7 @@ import ChatUi from "./components/ChatUi";
 
 export default async function Home() {
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  // const { data, error } = await supabase.from("chats").select("*");
 
   return (
     <section className="flex">

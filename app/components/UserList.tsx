@@ -1,5 +1,3 @@
-import React from "react";
-
 const UserList = () => {
   return (
     <div className="flex flex-col bg-white overflow-hidden w-full hover:bg-gray-100">
