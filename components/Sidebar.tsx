@@ -84,8 +84,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           className={`text-gray-600 ${active ? "text-green-700" : ""}`}
         />
         <span
-          className={`overflow-hidden transition-all text-sm shadow-xl ${
-            expanded ? "w-30 ml-1.5" : "w-0"
+          className={`overflow-hidden transition-all text-sm  ${
+            expanded ? "w-30 ml-1.5" : "w-0 shadow-xl"
           }`}
         >
           {title}

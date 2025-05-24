@@ -1,9 +1,9 @@
+import React from "react";
 import ChatUi from "@/components/ChatUi";
 import Header from "@/components/Header";
 import UserList from "@/components/UserList";
 import SidebarItems from "@/components/SidebarItems";
 import { createClient, getCurrentUser } from "@/utils/supabase/server";
-import React from "react";
 
 export default async function Home() {
   const supabase = await createClient();
