@@ -12,22 +12,22 @@ import { MdChecklist } from "react-icons/md";
 import { IoIosSettings } from "react-icons/io";
 
 const sidebarItems = [
-  { icon: AiFillHome, text: "Home", active: true, href: "/", divider: true },
-  { icon: BsChatDotsFill, text: "Chats", href: "/" },
-  { icon: IoTicket, text: "Ticket", href: "/" },
-  { icon: GoGraph, text: "Analytics", href: "/", divider: true },
-  { icon: IoListSharp, text: "Lists", href: "/" },
-  { icon: HiMegaphone, text: "Announcements", href: "/" },
+  { icon: AiFillHome, title: "Home", active: true, href: "/", divider: true },
+  { icon: BsChatDotsFill, title: "Chats", href: "/" },
+  { icon: IoTicket, title: "Ticket", href: "/" },
+  { icon: GoGraph, title: "Analytics", href: "/", divider: true },
+  { icon: IoListSharp, title: "Lists", href: "/" },
+  { icon: HiMegaphone, title: "Announcements", href: "/" },
   {
     icon: TiFlowMerge,
-    text: "Connections",
-    href: "/connections",
+    title: "Connections",
+    href: "/",
     divider: true,
   },
-  { icon: RiContactsBookFill, text: "Contacts", href: "/" },
-  { icon: RiFolderImageFill, text: "Gallery", href: "/", divider: true },
-  { icon: MdChecklist, text: "Checklist", href: "/" },
-  { icon: IoIosSettings, text: "Settings", href: "/" },
+  { icon: RiContactsBookFill, title: "Contacts", href: "/" },
+  { icon: RiFolderImageFill, title: "Gallery", href: "/", divider: true },
+  { icon: MdChecklist, title: "Checklist", href: "/" },
+  { icon: IoIosSettings, title: "Settings", href: "/" },
 ];
 
 const SidebarItems = () => {
@@ -37,7 +37,7 @@ const SidebarItems = () => {
         <React.Fragment key={index}>
           <SidebarItem
             icon={item.icon}
-            text={item.text}
+            title={item.title}
             active={item.active}
             href={item.href}
           />

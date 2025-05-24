@@ -8,7 +8,7 @@ import { UrlObject } from "url";
 
 interface SidebarItemProps {
   icon: IconType;
-  text: string;
+  title: string;
   active?: boolean;
   href: string | UrlObject;
 }
@@ -64,7 +64,7 @@ const Sidebar = ({
 
 export const SidebarItem: React.FC<SidebarItemProps> = ({
   icon: Icon,
-  text,
+  title,
   active,
   href,
 }) => {
@@ -84,19 +84,19 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           className={`text-gray-600 ${active ? "text-green-700" : ""}`}
         />
         <span
-          className={`overflow-hidden transition-all text-sm ${
+          className={`overflow-hidden transition-all text-sm shadow-xl ${
             expanded ? "w-30 ml-1.5" : "w-0"
           }`}
         >
-          {text}
+          {title}
         </span>
         {!expanded && (
           <div
             className={`
-          absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+          absolute left-full rounded-md px-2 py-1 ml-6 bg-gray-100 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 shadow-md
         `}
           >
-            {text}
+            {title}
           </div>
         )}
       </li>
