@@ -1,20 +1,17 @@
 import Image from "next/image";
-
-interface User {
-  full_name: string;
-  email: string;
-  avatar_url: string;
-}
+import { User } from "./MainComponent";
 
 interface UserProps {
   user: User;
+  onClick: (user: User) => void;
 }
 
-const UserList = ({ user }: UserProps) => {
-  console.log(user);
-
+const UserList = ({ user, onClick }: UserProps) => {
   return (
-    <div className="flex flex-col bg-white overflow-hidden w-full hover:bg-gray-100">
+    <div
+      onClick={() => onClick(user)}
+      className="flex flex-col bg-white overflow-hidden w-full hover:bg-gray-100"
+    >
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
           <div className="flex items-center justify-center w-10 h-10">

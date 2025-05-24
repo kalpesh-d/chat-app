@@ -10,18 +10,37 @@ import {
 } from "react-icons/fi";
 import { IoSend } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
+import { User } from "./MainComponent";
 
-const ChatUi = () => {
+interface ChatUiProps {
+  selectedUser: User | null;
+}
+
+const ChatUi = ({ selectedUser }: ChatUiProps) => {
+  if (!selectedUser) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500">Select a user to start chatting</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full bg-gray-100">
       {/* Header */}
       <div className="flex items-center justify-between p-3 bg-white text-black">
         <div className="flex items-center">
-          <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full">
-            <span className="text-white">T</span>
+          <div className="flex items-center justify-center w-10 h-10">
+            <Image
+              src={selectedUser.avatar_url}
+              width={100}
+              height={100}
+              alt={`${selectedUser.full_name}-avatar`}
+              className="object-cover w-full h-full rounded-full"
+            />
           </div>
           <div className="ml-3">
-            <div className="text-sm font-bold">Test El Centro</div>
+            <div className="text-sm font-bold">{selectedUser.full_name}</div>
             <div className="text-xs font-medium text-gray-500">
               Roshnag Airtel, Roshnag Jlo, Bharat Kumar Ramesh, Periskope
             </div>
@@ -56,16 +75,16 @@ const ChatUi = () => {
 
           <div className="flex justify-start">
             <Image
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              src={selectedUser.avatar_url}
               width={100}
               height={100}
               alt="profile"
-              className="w-6 h-6 rounded-full mr-3"
+              className="w-6 h-6 rounded-full mr-2"
             />
             <div className="bg-white text-green-500 p-2 rounded-tr-md rounded-br-md rounded-bl-md max-w-xs shadow">
               <div className="font-bold text-xs flex items-center gap-x-6">
-                <p>Roshnag Airtel</p>
-                <p className="text-[0.6rem] text-slate-400">Roshnag Airtel</p>
+                <p>{selectedUser.full_name}</p>
+                <p className="text-[0.6rem] text-slate-400">+91 12345 67890</p>
               </div>
               <div className="text-black text-sm font-medium mt-1">
                 Hello, South Euna!

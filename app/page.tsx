@@ -1,8 +1,7 @@
 import React from "react";
-import ChatUi from "@/components/ChatUi";
 import Header from "@/components/Header";
-import UserList from "@/components/UserList";
 import SidebarItems from "@/components/SidebarItems";
+import MainComponent from "@/components/MainComponent";
 import { createClient, getCurrentUser } from "@/utils/supabase/server";
 
 export default async function Home() {
@@ -20,35 +19,27 @@ export default async function Home() {
       if (error) throw error;
       return { success: true, userList: data };
     } catch (error) {
-      return { success: false, error: error.message };
+      return { success: false, error: (error as Error).message };
     }
   };
 
   const { userList } = await getUsers();
 
+  if (!userList) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-red-500">Failed to load user list.</p>
+      </div>
+    );
+  }
+
   return (
     <section className="flex">
       <SidebarItems />
-
       <div className="w-full">
         <Header />
-        <section className="flex">
-          <div className="max-w-sm w-full border-r border-gray-200">
-            {userList?.map((user) => (
-              <UserList user={user} key={user.id} />
-            ))}
-          </div>
-
-          <div className="w-full">
-            <ChatUi />
-          </div>
-          <div className="border-l">
-            <SidebarItems />
-          </div>
-        </section>
+        <MainComponent userList={userList} />
       </div>
-
-      <div className="border-l"></div>
     </section>
   );
 }
