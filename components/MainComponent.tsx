@@ -3,24 +3,36 @@ import ChatUi from "./ChatUi";
 import UserList from "./UserList";
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { useUserList, User } from "@/utils/supabase/hooks";
 
-export interface User {
-  id: string;
-  full_name: string;
-  email: string;
-  avatar_url: string;
-  last_message_time?: string;
-}
-
-interface UserListProps {
-  userList: User[];
-}
-
-const MainComponent = ({ userList }: UserListProps) => {
+const MainComponent = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [sortedUsers, setSortedUsers] = useState<User[]>(userList);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
-  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUser({
+          id: user.id,
+          full_name: String(
+            user.user_metadata?.full_name || user.email || "User"
+          ),
+          email: String(user.email || ""),
+          avatar_url: String(
+            user.user_metadata?.avatar_url || "/default-avatar.png"
+          ),
+        });
+      }
+    };
+    fetchCurrentUser();
+  }, []);
+
+  const { users: sortedUsers } = useUserList(currentUser);
 
   const handleSelectUser = (user: User) => {
     setSelectedUser(user);
@@ -38,26 +50,6 @@ const MainComponent = ({ userList }: UserListProps) => {
   const updateUserListOnNewMessage = useCallback(
     (newMessage: any) => {
       const senderId = newMessage.sender_id;
-      const receiverId = newMessage.receiver_id;
-      const timestamp = newMessage.created_at;
-
-      setSortedUsers((prevUsers) => {
-        const updatedUsers = prevUsers.map((user) => {
-          if (user.id === senderId || user.id === receiverId) {
-            return { ...user, last_message_time: timestamp };
-          }
-          return user;
-        });
-
-        return [...updatedUsers].sort((a, b) => {
-          return (
-            new Date(b.last_message_time || 0).getTime() -
-            new Date(a.last_message_time || 0).getTime()
-          );
-        });
-      });
-
-      // Update unread count if message is from other user and not currently selected
       if (selectedUser && senderId !== selectedUser.id) {
         setUnreadCounts((prev) => ({
           ...prev,
@@ -69,7 +61,7 @@ const MainComponent = ({ userList }: UserListProps) => {
   );
 
   useEffect(() => {
-    const channel = supabase
+    const channel = createClient()
       .channel("realtime-messages")
       .on(
         "postgres_changes",
@@ -85,9 +77,9 @@ const MainComponent = ({ userList }: UserListProps) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      createClient().removeChannel(channel);
     };
-  }, [supabase, updateUserListOnNewMessage]);
+  }, [updateUserListOnNewMessage]);
 
   return (
     <section className="flex min-h-[91vh]">

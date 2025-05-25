@@ -12,8 +12,8 @@ import { MdChecklist } from "react-icons/md";
 import { IoIosSettings } from "react-icons/io";
 
 const sidebarItems = [
-  { icon: AiFillHome, title: "Home", active: true, href: "/", divider: true },
-  { icon: BsChatDotsFill, title: "Chats", href: "/" },
+  { icon: AiFillHome, title: "Home", href: "/", divider: true },
+  { icon: BsChatDotsFill, title: "Chats", href: "/", active: true },
   { icon: IoTicket, title: "Ticket", href: "/" },
   { icon: GoGraph, title: "Analytics", href: "/", divider: true },
   { icon: IoListSharp, title: "Lists", href: "/" },

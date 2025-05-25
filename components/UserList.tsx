@@ -1,5 +1,6 @@
+import { User } from "@/utils/supabase/hooks";
 import Image from "next/image";
-import { User } from "./MainComponent";
+import { formatDateLabel } from "@/utils/helper";
 
 interface UserProps {
   user: User;
@@ -28,26 +29,34 @@ const UserList = ({ user, onClick, unreadCount = 0 }: UserProps) => {
             <p className="text-sm font-bold text-gray-900 tracking-tight">
               {user.full_name}
             </p>
-            <p className="text-xs font-medium text-gray-400">
-              Start a new conversation
+            <p className="text-sm font-medium text-gray-400 tracking-tight truncate max-w-[200px]">
+              {user.last_message
+                ? user.last_message
+                : "Start a new conversation"}
             </p>
           </div>
         </div>
 
         {/* Right side: Unread badge and other info */}
         <div className="flex flex-col items-end gap-1">
-          <div className="bg-green-200 text-green-600 text-xs px-1.5 py-1 rounded font-medium">
+          <div className="bg-green-200 text-green-600 text-[0.65rem] px-1 py-1 rounded font-medium">
             Demo
           </div>
 
           {/* Show unread count badge only if unreadCount > 0 */}
-          {unreadCount > 0 && (
-            <div className="flex items-center justify-center w-5 h-5 bg-red-500 rounded-full text-white text-[0.70rem] font-medium">
-              {unreadCount}
-            </div>
-          )}
+          <div
+            className={`flex items-center justify-center w-4 h-4 rounded-full text-white text-[0.6rem] font-medium
+            ${unreadCount > 0 ? "bg-green-500 visible" : "invisible"}
+          `}
+          >
+            {unreadCount > 0 ? unreadCount : 0}
+          </div>
 
-          <span className="text-xs text-gray-400">Yesterday</span>
+          <span className="text-[0.6rem] font-medium text-gray-400">
+            {user.last_message_time
+              ? formatDateLabel(user.last_message_time)
+              : ""}
+          </span>
         </div>
       </div>
     </div>
