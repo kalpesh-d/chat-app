@@ -131,12 +131,14 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
         className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover min-h-[537px] max-h-[537px] relative"
       >
         <div className="flex flex-col space-y-4">
-          <MessageList
-            messages={messages}
-            currentUser={currentUser}
-            selectedUser={selectedUser}
-            messagesEndRef={messagesEndRef}
-          />
+          {currentUser && (
+            <MessageList
+              messages={messages}
+              currentUser={currentUser}
+              selectedUser={selectedUser}
+              messagesEndRef={messagesEndRef}
+            />
+          )}
         </div>
 
         {/* Scroll to bottom button */}

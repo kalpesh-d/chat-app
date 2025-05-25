@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import React, { createContext, useContext, useState } from "react";
 import { IconType } from "react-icons";
 import { TbLayoutSidebarLeftExpandFilled, TbStarsFilled } from "react-icons/tb";
@@ -30,7 +31,13 @@ const Sidebar = ({
     <aside className="h-screen">
       <nav className="h-full flex flex-col border-r border-gray-200">
         <div className="p-3">
-          <img src="/periskope.svg" alt="Logo" className="h-8" />
+          <Image
+            src="/periskope.svg"
+            alt="Logo"
+            width={32}
+            height={32}
+            className="h-8"
+          />
         </div>
 
         <SidebarContext.Provider value={{ expanded }}>
