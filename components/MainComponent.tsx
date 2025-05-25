@@ -103,6 +103,8 @@ const MainComponent = () => {
         switch (filter) {
           case "unread":
             return unreadCounts[user.id] > 0;
+          case "ai":
+            return user.id === "groq-ai";
           default:
             return true;
         }
@@ -202,6 +204,16 @@ const MainComponent = () => {
                 }`}
               >
                 Unread Messages
+              </button>
+              <button
+                onClick={() => toggleFilter("ai")}
+                className={`w-full text-left px-1 py-1 rounded-md text-sm ${
+                  activeFilters.includes("ai")
+                    ? "bg-purple-100 text-purple-700"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                AI Chats
               </button>
             </div>
           </div>
