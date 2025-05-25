@@ -1,4 +1,4 @@
-export const CollapseIcon = (props: any) => (
+export const CollapseIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     {...props}
     fill="currentColor"

@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
+interface User {
+  id: string;
+  full_name: string;
+  email: string;
+  avatar_url: string;
+  last_message?: string;
+  last_message_time?: string;
+}
+
+interface Message {
+  sender_id: string;
+  receiver_id: string;
+  message: string;
+  created_at: string;
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const currentUserId = searchParams.get("currentUserId");
@@ -20,7 +36,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: userError.message }, { status: 500 });
   }
   // For each user, fetch the last message between currentUser and that user
-  const userIds = usersData.map((u: any) => u.id);
+  const userIds = (usersData as User[]).map((u) => u.id);
   const { data: messagesData } = await supabase
     .from("messages")
     .select("sender_id, receiver_id, message, created_at")
@@ -39,7 +55,7 @@ export async function GET(req: NextRequest) {
     { message: string; created_at: string }
   >();
   if (messagesData) {
-    messagesData.forEach((msg: any) => {
+    (messagesData as Message[]).forEach((msg) => {
       const otherUserId =
         msg.sender_id === currentUserId ? msg.receiver_id : msg.sender_id;
       if (!lastMessageMap.has(otherUserId)) {
@@ -51,14 +67,14 @@ export async function GET(req: NextRequest) {
     });
   }
   // Enrich users with last_message and last_message_time
-  const enrichedUsers = usersData.map((user: any) => ({
+  const enrichedUsers = (usersData as User[]).map((user) => ({
     ...user,
     last_message: lastMessageMap.get(user.id)?.message,
     last_message_time: lastMessageMap.get(user.id)?.created_at,
   }));
   // Sort by last_message_time descending
   enrichedUsers.sort(
-    (a: any, b: any) =>
+    (a, b) =>
       new Date(b.last_message_time || "1970-01-01T00:00:00Z").getTime() -
       new Date(a.last_message_time || "1970-01-01T00:00:00Z").getTime()
   );

@@ -1,8 +1,23 @@
 import React from "react";
 import { formatDateLabel } from "@/utils/helper";
 
+interface Message {
+  id: string;
+  sender_id: string;
+  receiver_id: string;
+  message: string;
+  created_at: string;
+}
+
+interface User {
+  id: string;
+  full_name: string;
+  email: string;
+  avatar_url: string;
+}
+
 interface MessageBubbleProps {
-  msg: any;
+  msg: Message;
   isOwn: boolean;
   isLast: boolean;
   userName: string;
@@ -54,9 +69,9 @@ const DateDivider = ({ date }: { date: string }) => (
 );
 
 interface MessageListProps {
-  messages: any[];
-  currentUser: any;
-  selectedUser: any;
+  messages: Message[];
+  currentUser: User;
+  selectedUser: User;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -67,7 +82,7 @@ const MessageList = ({
   messagesEndRef,
 }: MessageListProps) => {
   let lastDate: string | null = null;
-  return messages.map((msg: any, index: number) => {
+  return messages.map((msg, index: number) => {
     const currentDate = formatDateLabel(msg.created_at);
     const showDate = currentDate !== lastDate;
     lastDate = currentDate;

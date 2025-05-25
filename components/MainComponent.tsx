@@ -55,8 +55,8 @@ const MainComponent = () => {
   };
 
   const updateUserListOnNewMessage = useCallback(
-    (newMessage: any) => {
-      const senderId = newMessage.sender_id;
+    (payload: { new: { sender_id: string } }) => {
+      const senderId = payload.new.sender_id;
       if (selectedUser && senderId !== selectedUser.id) {
         setUnreadCounts((prev) => ({
           ...prev,
@@ -77,8 +77,8 @@ const MainComponent = () => {
           schema: "public",
           table: "messages",
         },
-        (payload) => {
-          updateUserListOnNewMessage(payload.new);
+        (payload: { new: { sender_id: string } }) => {
+          updateUserListOnNewMessage(payload);
         }
       )
       .subscribe();
