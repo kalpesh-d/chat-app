@@ -1,14 +1,29 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 function LoginButton() {
   const supabase = createClient();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const next = searchParams.get("next");
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        router.push(next || "/");
+        router.refresh();
+      }
+    };
+    checkUser();
+  }, [router, next, supabase.auth]);
 
   const loginWithGoogle = async () => {
     try {
@@ -23,7 +38,7 @@ function LoginButton() {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error loging in with Google:", error);
+      console.error("Error logging in with Google:", error);
     }
   };
 
