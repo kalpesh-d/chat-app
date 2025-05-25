@@ -1,29 +1,10 @@
-import React from "react";
 import Header from "@/components/Header";
 import SidebarItems from "@/components/SidebarItems";
 import MainComponent from "@/components/MainComponent";
-import { createClient, getCurrentUser } from "@/utils/supabase/server";
+import { getUsersWithLastMessage } from "@/utils/supabase/server";
 
 export default async function Home() {
-  const supabase = await createClient();
-
-  const getUsers = async () => {
-    try {
-      const user = await getCurrentUser();
-
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .neq("id", user?.id);
-
-      if (error) throw error;
-      return { success: true, userList: data };
-    } catch (error) {
-      return { success: false, error: (error as Error).message };
-    }
-  };
-
-  const { userList } = await getUsers();
+  const { userList } = await getUsersWithLastMessage();
 
   if (!userList) {
     return (

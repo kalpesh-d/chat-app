@@ -33,7 +33,9 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const supabase = createClient();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  // Fetch current logged-in user
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const {
@@ -44,6 +46,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
     fetchCurrentUser();
   }, []);
 
+  // Fetch conversation messages
   const fetchMessages = useCallback(async () => {
     if (!currentUser || !selectedUser) return;
 
@@ -62,15 +65,55 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
     }
   }, [currentUser, selectedUser, supabase]);
 
+  // Fetch messages on user switch
   useEffect(() => {
     if (selectedUser && currentUser) {
       fetchMessages();
     }
   }, [selectedUser, currentUser, fetchMessages]);
 
+  // Real-time listener for new messages
+  useEffect(() => {
+    if (!currentUser || !selectedUser) return;
+
+    const channel = supabase
+      .channel(`chat-${currentUser.id}-${selectedUser.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+        },
+        (payload) => {
+          const msg = payload.new as MessageProps;
+          const isRelevant =
+            (msg.sender_id === currentUser.id &&
+              msg.receiver_id === selectedUser.id) ||
+            (msg.sender_id === selectedUser.id &&
+              msg.receiver_id === currentUser.id);
+
+          if (isRelevant) {
+            setMessages((prev) => [...prev, msg]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [currentUser, selectedUser]);
+
+  // Auto scroll to last message
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
     if (!newMessage.trim() || !currentUser || !selectedUser) return;
 
     const { error } = await supabase.from("messages").insert([
@@ -84,18 +127,9 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
     if (error) {
       console.error("Error sending message:", error);
     } else {
-      setNewMessage("");
-      fetchMessages();
+      setNewMessage(""); // Clear input
     }
   };
-
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
 
   const renderMessages = () => {
     let lastDate: string | null = null;
@@ -185,7 +219,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover max-h-[537px]">
+      <div className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover min-h-[537px] max-h-[537px]">
         <div className="flex flex-col space-y-4">{renderMessages()}</div>
       </div>
 
