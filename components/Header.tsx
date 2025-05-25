@@ -1,7 +1,12 @@
 import React from "react";
 
 import { BsChatDotsFill } from "react-icons/bs";
-import { TbRefreshDot } from "react-icons/tb";
+import { CiCircleList } from "react-icons/ci";
+import { IoSparklesSharp } from "react-icons/io5";
+import { LuChevronsUpDown } from "react-icons/lu";
+import { MdInstallDesktop } from "react-icons/md";
+import { PiBellSlashFill } from "react-icons/pi";
+import { TbHelp, TbRefreshDot } from "react-icons/tb";
 
 const Header = () => {
   return (
@@ -17,21 +22,25 @@ const Header = () => {
           <TbRefreshDot size="1.4em" /> Refresh
         </button>
         <button className="flex items-center text-sm text-black font-medium px-3 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-1">
-          <TbRefreshDot size="1.4em" /> Help
+          <TbHelp size="1.4em" /> Help
         </button>
-        <button className="flex items-center text-sm text-black font-medium px-3 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-1">
-          <TbRefreshDot size="1.4em" />
+        <button className="flex items-center text-sm text-black font-medium px-3 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-2">
+          <span className="relative flex size-3">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-200"></span>
+            <span className="relative inline-flex size-3 rounded-full bg-yellow-300"></span>
+          </span>
           5/6 Phones
-          <TbRefreshDot size="1.4em" />
+          <LuChevronsUpDown size="1.2em" />
         </button>
         <button className="flex items-center text-sm text-black font-medium px-2 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-1">
-          <TbRefreshDot size="1.4em" />
+          <MdInstallDesktop size="1.4em" />
         </button>
         <button className="flex items-center text-sm text-black font-medium px-2 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-1">
-          <TbRefreshDot size="1.4em" />
+          <PiBellSlashFill size="1.4em" />
         </button>
-        <button className="flex items-center text-sm text-black font-medium px-2 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-1">
-          <TbRefreshDot size="1.4em" />
+        <button className="flex items-center text-sm text-black font-medium px-2 py-1 border border-gray-300 rounded-sm hover:bg-gray-100 transition duration-200 gap-2">
+          <IoSparklesSharp className="text-yellow-500" />
+          <CiCircleList size="1.4em" />
         </button>
       </div>
     </header>

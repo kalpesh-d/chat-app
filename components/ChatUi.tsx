@@ -12,10 +12,10 @@ import {
 } from "react-icons/fi";
 import { IoArrowDownOutline, IoSend } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
-import { IoIosArrowDown } from "react-icons/io";
 import { createClient } from "@/utils/supabase/client";
 import { useMessages, User } from "@/utils/supabase/hooks";
 import MessageList from "./MessageList";
+import { HiSparkles } from "react-icons/hi2";
 
 interface ChatUiProps {
   selectedUser: User | null;
@@ -123,7 +123,10 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
             </p>
           </div>
         </div>
-        <LuSearch />
+        <div className="flex gap-x-4 mr-3">
+          <HiSparkles className="rotate-180" />
+          <LuSearch />
+        </div>
       </div>
 
       {/* Messages */}

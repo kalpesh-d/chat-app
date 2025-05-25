@@ -4,11 +4,19 @@ import UserList from "./UserList";
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useUserList, User } from "@/utils/supabase/hooks";
+import RightPanel from "./RightPanel";
+import { HiFolderArrowDown } from "react-icons/hi2";
+import { CgSearch } from "react-icons/cg";
+import { IoFilter, IoClose } from "react-icons/io5";
 
 const MainComponent = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
+  const [showSearch, setShowSearch] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -81,9 +89,123 @@ const MainComponent = () => {
     };
   }, [updateUserListOnNewMessage]);
 
+  // Filter and search users
+  const filteredUsers = sortedUsers.filter((user) => {
+    const matchesSearch =
+      searchQuery === "" ||
+      user.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesFilters =
+      activeFilters.length === 0 ||
+      activeFilters.some((filter) => {
+        switch (filter) {
+          case "unread":
+            return unreadCounts[user.id] > 0;
+          default:
+            return true;
+        }
+      });
+
+    return matchesSearch && matchesFilters;
+  });
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Search is handled in real-time through the filteredUsers
+  };
+
+  const toggleFilter = (filter: string) => {
+    setActiveFilters((prev) =>
+      prev.includes(filter)
+        ? prev.filter((f) => f !== filter)
+        : [...prev, filter]
+    );
+  };
+
   return (
     <section className="flex">
       <div className="max-w-sm w-full border-r border-gray-200">
+        <div className="flex gap-2 items-center h-12 bg-gray-100 px-4 justify-between border-b border-gray-200">
+          <div className="flex items-center text-green-700 gap-1">
+            <HiFolderArrowDown size="1em" />
+            <span className="text-xs font-bold tracking-tight">
+              Custom Filter
+            </span>
+            <button
+              className="ml-1 text-xs text-gray-800 font-semibold px-2 py-1 border border-gray-300 bg-white rounded-sm hover:bg-gray-100"
+              onClick={() => setShowFilter(!showFilter)}
+            >
+              Save
+            </button>
+          </div>
+          <div className="flex items-center">
+            <button
+              className="flex items-center gap-1 ml-1 text-xs text-gray-800 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-gray-100"
+              onClick={() => setShowSearch(!showSearch)}
+            >
+              <CgSearch size="1.3em" />
+              Search
+            </button>
+            <button
+              className="relative flex items-center gap-1 ml-1 text-xs text-green-600 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-green-50"
+              onClick={() => setShowFilter(!showFilter)}
+            >
+              <IoFilter size="1.3em" />
+              Filtered
+              {activeFilters.length > 0 && (
+                <IoClose
+                  size="1.3em"
+                  className="absolute bg-green-600 text-white rounded-full top-[-6px] right-[-7px]"
+                />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Search Input */}
+        {showSearch && (
+          <div className="p-2 border-b border-gray-200">
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-2 py-1 border border-gray-300 text-sm rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setShowSearch(false);
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <IoClose size={20} />
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Filter Options */}
+        {showFilter && (
+          <div className="p-2 border-b border-gray-200">
+            <div className="space-y-2">
+              <button
+                onClick={() => toggleFilter("unread")}
+                className={`w-full text-left px-1 py-1 rounded-md text-sm ${
+                  activeFilters.includes("unread")
+                    ? "bg-green-100 text-green-700"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                Unread Messages
+              </button>
+            </div>
+          </div>
+        )}
+
         {loading
           ? [0, 1, 2, 3, 4, 5, 6].map((item) => (
               <div key={item} className="mx-auto border border-green-300 p-4">
@@ -102,7 +224,7 @@ const MainComponent = () => {
                 </div>
               </div>
             ))
-          : sortedUsers.map((user) => (
+          : filteredUsers.map((user) => (
               <UserList
                 key={user.id}
                 user={user}
@@ -115,6 +237,7 @@ const MainComponent = () => {
       <div className="w-full h-full">
         <ChatUi selectedUser={selectedUser} />
       </div>
+      <RightPanel />
     </section>
   );
 };
