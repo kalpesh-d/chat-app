@@ -4,13 +4,14 @@ import { User } from "./MainComponent";
 interface UserProps {
   user: User;
   onClick: (user: User) => void;
+  unreadCount?: number; // added prop for unread messages
 }
 
-const UserList = ({ user, onClick }: UserProps) => {
+const UserList = ({ user, onClick, unreadCount = 0 }: UserProps) => {
   return (
     <div
       onClick={() => onClick(user)}
-      className="flex flex-col bg-white overflow-hidden w-full hover:bg-gray-100"
+      className="flex flex-col bg-white overflow-hidden w-full hover:bg-gray-100 cursor-pointer"
     >
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
@@ -32,13 +33,20 @@ const UserList = ({ user, onClick }: UserProps) => {
             </p>
           </div>
         </div>
+
+        {/* Right side: Unread badge and other info */}
         <div className="flex flex-col items-end gap-1">
           <div className="bg-green-200 text-green-600 text-xs px-1.5 py-1 rounded font-medium">
             Demo
           </div>
-          <div className="flex items-center justify-center w-4 h-4 bg-green-500 rounded-full text-white">
-            <span className="text-[0.70rem] font-medium">4</span>
-          </div>
+
+          {/* Show unread count badge only if unreadCount > 0 */}
+          {unreadCount > 0 && (
+            <div className="flex items-center justify-center w-5 h-5 bg-red-500 rounded-full text-white text-[0.70rem] font-medium">
+              {unreadCount}
+            </div>
+          )}
+
           <span className="text-xs text-gray-400">Yesterday</span>
         </div>
       </div>
