@@ -32,9 +32,7 @@ const MainComponent = () => {
             user.user_metadata?.full_name || user.email || "User"
           ),
           email: String(user.email || ""),
-          avatar_url: String(
-            user.user_metadata?.avatar_url || "/default-avatar.png"
-          ),
+          avatar_url: String(user.user_metadata?.avatar_url),
         });
       }
     };
@@ -128,7 +126,7 @@ const MainComponent = () => {
 
   return (
     <section className="flex">
-      <div className="max-w-sm w-full border-r border-gray-200 relative">
+      <div className="max-w-sm w-full border-r border-gray-200 relative max-h-screen overflow-y-auto">
         <div className="flex gap-2 items-center h-12 bg-gray-100 px-4 justify-between border-b border-gray-200">
           <div className="flex items-center text-green-700 gap-1">
             <HiFolderArrowDown size="1em" />

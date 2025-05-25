@@ -39,9 +39,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
             user.user_metadata?.full_name || user.email || "User"
           ),
           email: String(user.email || ""),
-          avatar_url: String(
-            user.user_metadata?.avatar_url || "/default-avatar.png"
-          ),
+          avatar_url: String(user.user_metadata?.avatar_url),
         });
       }
     };
