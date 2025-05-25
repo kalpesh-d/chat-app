@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   FiClock,
   FiFile,
@@ -68,7 +68,9 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
     }
   }, [selectedUser, currentUser, fetchMessages]);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+
     if (!newMessage.trim() || !currentUser || !selectedUser) return;
 
     const { error } = await supabase.from("messages").insert([
@@ -87,13 +89,23 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
     }
   };
 
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   const renderMessages = () => {
     let lastDate: string | null = null;
 
-    return messages.map((msg) => {
+    return messages.map((msg, index) => {
       const currentDate = formatDateLabel(msg.created_at);
       const showDate = currentDate !== lastDate;
       lastDate = currentDate;
+
+      const isLast = index === messages.length - 1;
 
       return (
         <React.Fragment key={msg.id}>
@@ -110,6 +122,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
                 ? "justify-end"
                 : "justify-start"
             }`}
+            ref={isLast ? messagesEndRef : null}
           >
             <div className="bg-green-100 text-green-700 p-2 rounded-tl-md rounded-br-md rounded-bl-md max-w-xs shadow">
               <div className="font-bold text-xs flex items-center gap-x-6">
@@ -178,7 +191,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
 
       {/* Input */}
       <div className="flex flex-col p-3 bg-white border-t border-gray-300">
-        <div className="flex mb-3 gap-5">
+        <form className="flex mb-3 gap-5">
           <input
             type="text"
             placeholder="Type your message..."
@@ -187,12 +200,13 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
             onChange={(e) => setNewMessage(e.target.value)}
           />
           <button
+            type="submit"
             onClick={handleSendMessage}
             className="hover:bg-green-200 cursor-pointer px-3 py-2 rounded-md"
           >
             <IoSend className="text-green-700" size="1.2em" />
           </button>
-        </div>
+        </form>
 
         {/* Icons */}
         <div className="flex justify-between">

@@ -31,9 +31,9 @@ const MainComponent = ({ userList }: UserListProps) => {
       <div className="w-full">
         <ChatUi selectedUser={selectedUser} />
       </div>
-      <div className="border-l">
+      {/* <div className="border-l">
         <SidebarItems />
-      </div>
+      </div> */}
     </section>
   );
 };
