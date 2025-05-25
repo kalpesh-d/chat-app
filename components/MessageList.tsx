@@ -20,14 +20,18 @@ const MessageBubble = ({
     className={`mb-2 flex ${isOwn ? "justify-end" : "justify-start"}`}
     ref={isLast ? messagesEndRef : null}
   >
-    <div className="bg-green-100 text-green-700 p-2 rounded-tl-md rounded-br-md rounded-bl-md max-w-xs shadow">
-      <div className="font-bold text-xs flex items-center gap-x-6">
+    <div
+      className={`${
+        isOwn ? "bg-green-100 text-green-700" : "bg-white text-green-500"
+      } p-2 rounded-tl-md rounded-br-md rounded-bl-md max-w-md shadow`}
+    >
+      <div className="font-bold text-xs flex justify-between items-center gap-x-6">
         <p>{userName}</p>
         <p className="text-[0.6rem] text-slate-400 font-medium">
           +91 12345 67890
         </p>
       </div>
-      <div className="text-gray-800 text-sm/4 font-medium mt-1">
+      <div className="text-gray-800 text-sm/4 font-medium my-1">
         {msg.message}
       </div>
       <div className="text-[0.6rem] text-right font-medium text-slate-400">

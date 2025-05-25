@@ -10,8 +10,9 @@ import {
   FiSmile,
   FiStar,
 } from "react-icons/fi";
-import { IoSend } from "react-icons/io5";
+import { IoArrowDownOutline, IoSend } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
+import { IoIosArrowDown } from "react-icons/io";
 import { createClient } from "@/utils/supabase/client";
 import { useMessages, User } from "@/utils/supabase/hooks";
 import MessageList from "./MessageList";
@@ -23,7 +24,9 @@ interface ChatUiProps {
 const ChatUi = ({ selectedUser }: ChatUiProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch current logged-in user
   useEffect(() => {
@@ -53,10 +56,36 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
 
   // Auto scroll to last message
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    scrollToBottom();
   }, [messages]);
+
+  // Handle scroll events to show/hide scroll button
+  const handleScroll = () => {
+    if (chatContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        chatContainerRef.current;
+      // Show button if user has scrolled up more than 100px from bottom
+      const isScrolledUp = scrollHeight - scrollTop - clientHeight > 300;
+      console.log("Scroll position:", {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+        isScrolledUp,
+      });
+      setShowScrollButton(isScrolledUp);
+    }
+  };
+
+  // Scroll to bottom function
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+      setShowScrollButton(false);
+    }
+  };
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,16 +96,16 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
 
   if (!selectedUser) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center min-h-[91vh]">
         <p className="text-gray-500">Select a user to start chatting</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-100">
+    <div className="flex flex-col justify-around h-full bg-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 bg-white text-black">
+      <div className="flex items-center justify-between p-3 bg-white text-black border-b border-gray-200">
         <div className="flex items-center">
           <div className="w-10 h-10 rounded-full overflow-hidden">
             <Image
@@ -98,7 +127,11 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover min-h-[537px] max-h-[537px]">
+      <div
+        ref={chatContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover min-h-[537px] max-h-[537px] relative"
+      >
         <div className="flex flex-col space-y-4">
           <MessageList
             messages={messages}
@@ -107,6 +140,18 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
             messagesEndRef={messagesEndRef}
           />
         </div>
+
+        {/* Scroll to bottom button */}
+        {showScrollButton && (
+          <div className="sticky bottom-0 left-0 right-0 flex justify-center">
+            <button
+              onClick={scrollToBottom}
+              className="bg-white px-2 py-1 text-gray-500 rounded shadow hover:bg-slate-100 transition-colors duration-200"
+            >
+              <IoArrowDownOutline size="1em" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Input */}
