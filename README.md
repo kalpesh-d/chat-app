@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chat Application
+
+A modern real-time chat application built with Next.js, React, and Supabase. This application provides a seamless messaging experience with authentication and real-time updates.
+
+## Features
+
+- 🔐 User Authentication
+- 💬 Real-time messaging
+- 🎨 Modern UI with Tailwind CSS
+- 🔒 Secure data handling with Supabase
+
+## Tech Stack
+
+- **Frontend Framework**: Next.js
+- **UI Library**: React
+- **Styling**: Tailwind CSS
+- **Backend/Database**: Supabase
+- **Language**: TypeScript
+- **Icons**: React Icons
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Node.js (Latest LTS version recommended)
+- npm or yarn
+- Supabase account and project
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd chat-app
+```
 
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+Create a `.env.local` file in the root directory and add your Supabase credentials:
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+GROQ_API_KEY=your_groq_url
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Starts the development server with Turbopack
+- `npm run build` - Builds the application for production
+- `npm run start` - Runs the built application
+- `npm run lint` - Runs ESLint for code linting
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+chat-app/
+├── app/              # Next.js app directory
+│   ├── api/         # API routes
+│   ├── auth/        # Authentication related pages
+│   └── login/       # Login page
+├── components/      # Reusable React components
+├── public/         # Static assets
+├── utils/          # Utility functions
+└── middleware.ts   # Next.js middleware
+```
