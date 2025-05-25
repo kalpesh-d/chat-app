@@ -2,20 +2,17 @@
 
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
-import {
-  FiClock,
-  FiFile,
-  FiMic,
-  FiPaperclip,
-  FiSmile,
-  FiStar,
-} from "react-icons/fi";
+import { FiClock, FiPaperclip, FiSmile } from "react-icons/fi";
 import { IoArrowDownOutline, IoSend } from "react-icons/io5";
-import { LuSearch } from "react-icons/lu";
+import { LuChevronsUpDown, LuSearch } from "react-icons/lu";
 import { createClient } from "@/utils/supabase/client";
 import { useMessages, User } from "@/utils/supabase/hooks";
 import MessageList from "./MessageList";
 import { HiSparkles } from "react-icons/hi2";
+import { AiOutlineHistory } from "react-icons/ai";
+import { HiOutlineSparkles } from "react-icons/hi";
+import { BsFillMicFill } from "react-icons/bs";
+import { FaBars } from "react-icons/fa";
 
 interface ChatUiProps {
   selectedUser: User | null;
@@ -124,8 +121,8 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
           </div>
         </div>
         <div className="flex gap-x-4 mr-3">
-          <HiSparkles className="rotate-180" />
-          <LuSearch />
+          <HiSparkles className="rotate-180 cursor-pointer" />
+          <LuSearch className="cursor-pointer" />
         </div>
       </div>
 
@@ -172,19 +169,36 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
           </button>
         </form>
 
-        {/* Icons */}
         <div className="flex justify-between">
           <div className="flex space-x-2">
-            {[FiPaperclip, FiSmile, FiClock, FiStar, FiFile, FiMic].map(
-              (Icon, idx) => (
-                <button
-                  key={idx}
-                  className="p-2 rounded-full hover:bg-gray-200"
-                >
-                  <Icon className="text-gray-600" />
-                </button>
-              )
-            )}
+            {[
+              FiPaperclip,
+              FiSmile,
+              FiClock,
+              AiOutlineHistory,
+              HiOutlineSparkles,
+              BsFillMicFill,
+              FaBars,
+            ].map((Icon, idx) => (
+              <button
+                key={idx}
+                className="p-2 rounded-full hover:bg-gray-200 cursor-pointer"
+              >
+                <Icon className="text-gray-800" />
+              </button>
+            ))}
+          </div>
+
+          <div className="border border-gray-200 px-2 py-1 rounded-md flex items-center cursor-pointer hover:bg-gray-100">
+            <Image
+              src="/periskope.svg"
+              alt="logo "
+              width={20}
+              height={20}
+              className="mr-2"
+            />
+            <span className="text-xs font-semibold">Periskope</span>
+            <LuChevronsUpDown className="ml-8" />
           </div>
         </div>
       </div>

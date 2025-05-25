@@ -32,6 +32,14 @@ export function useMessages(
     if (!currentUser || !selectedUser) return;
     setLoading(true);
     setError(null);
+
+    if (selectedUser.id === "groq-ai") {
+      // For AI user, we don't need to fetch from database
+      setMessages([]);
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("messages")
       .select("*")
@@ -54,6 +62,12 @@ export function useMessages(
 
   useEffect(() => {
     if (!currentUser || !selectedUser) return;
+
+    if (selectedUser.id === "groq-ai") {
+      // Don't set up realtime subscription for AI user
+      return;
+    }
+
     const channel = supabase
       .channel(`chat-${currentUser.id}-${selectedUser.id}`)
       .on(
@@ -84,6 +98,55 @@ export function useMessages(
 
   const sendMessage = async (message: string) => {
     if (!currentUser || !selectedUser || !message.trim()) return;
+
+    if (selectedUser.id === "groq-ai") {
+      // Handle AI message
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        sender_id: currentUser.id,
+        receiver_id: selectedUser.id,
+        message: message.trim(),
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, userMessage]);
+
+      try {
+        const response = await fetch("/api/groq", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            messages: [
+              ...messages.map((msg) => ({
+                role: msg.sender_id === currentUser.id ? "user" : "assistant",
+                content: msg.message,
+              })),
+              { role: "user", content: message.trim() },
+            ],
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to get AI response");
+        }
+
+        const data = await response.json();
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          sender_id: selectedUser.id,
+          receiver_id: currentUser.id,
+          message: data.choices[0].message.content,
+          created_at: new Date().toISOString(),
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      } catch (err: any) {
+        setError(err.message);
+      }
+      return;
+    }
+
+    // Handle regular user message
     const { error } = await supabase.from("messages").insert([
       {
         sender_id: currentUser.id,
@@ -114,7 +177,17 @@ export function useUserList(currentUser: User | null) {
         setError(data.error);
         setUsers([]);
       } else {
-        setUsers(data.users || []);
+        // Add Groq AI user to the list
+        const aiUser: User = {
+          id: "groq-ai",
+          full_name: "Groq AI Assistant",
+          email: "ai@groq.com",
+          avatar_url: "/aiprofile.jpeg",
+          last_message:
+            "I am your AI assistant powered by Groq. How can I help you today?",
+          last_message_time: new Date().toISOString(),
+        };
+        setUsers([aiUser, ...(data.users || [])]);
       }
     } catch (err: any) {
       setError(err.message);

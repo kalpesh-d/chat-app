@@ -9,6 +9,8 @@ interface UserProps {
 }
 
 const UserList = ({ user, onClick, unreadCount = 0 }: UserProps) => {
+  const isAI = user.id === "groq-ai";
+
   return (
     <div
       onClick={() => onClick(user)}
@@ -39,9 +41,15 @@ const UserList = ({ user, onClick, unreadCount = 0 }: UserProps) => {
 
         {/* Right side: Unread badge and other info */}
         <div className="flex flex-col items-end gap-1">
-          <div className="bg-green-200 text-green-600 text-[0.65rem] px-1 py-1 rounded font-medium">
-            Demo
-          </div>
+          {isAI ? (
+            <div className="bg-purple-200 text-purple-600 text-[0.65rem] px-1 py-1 rounded font-medium">
+              AI
+            </div>
+          ) : (
+            <div className="bg-green-200 text-green-600 text-[0.65rem] px-1 py-1 rounded font-medium">
+              Demo
+            </div>
+          )}
 
           {/* Show unread count badge only if unreadCount > 0 */}
           <div

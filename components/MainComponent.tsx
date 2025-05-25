@@ -8,6 +8,7 @@ import RightPanel from "./RightPanel";
 import { HiFolderArrowDown } from "react-icons/hi2";
 import { CgSearch } from "react-icons/cg";
 import { IoFilter, IoClose } from "react-icons/io5";
+import { TbMessageCirclePlus } from "react-icons/tb";
 
 const MainComponent = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -125,7 +126,7 @@ const MainComponent = () => {
 
   return (
     <section className="flex">
-      <div className="max-w-sm w-full border-r border-gray-200">
+      <div className="max-w-sm w-full border-r border-gray-200 relative">
         <div className="flex gap-2 items-center h-12 bg-gray-100 px-4 justify-between border-b border-gray-200">
           <div className="flex items-center text-green-700 gap-1">
             <HiFolderArrowDown size="1em" />
@@ -133,7 +134,7 @@ const MainComponent = () => {
               Custom Filter
             </span>
             <button
-              className="ml-1 text-xs text-gray-800 font-semibold px-2 py-1 border border-gray-300 bg-white rounded-sm hover:bg-gray-100"
+              className="ml-1 text-xs text-gray-800 font-semibold px-2 py-1 border border-gray-300 bg-white rounded-sm hover:bg-gray-100 cursor-pointer"
               onClick={() => setShowFilter(!showFilter)}
             >
               Save
@@ -141,14 +142,14 @@ const MainComponent = () => {
           </div>
           <div className="flex items-center">
             <button
-              className="flex items-center gap-1 ml-1 text-xs text-gray-800 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-gray-100"
+              className="flex items-center gap-1 ml-1 text-xs text-gray-800 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-gray-100 cursor-pointer"
               onClick={() => setShowSearch(!showSearch)}
             >
               <CgSearch size="1.3em" />
               Search
             </button>
             <button
-              className="relative flex items-center gap-1 ml-1 text-xs text-green-600 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-green-50"
+              className="relative flex items-center gap-1 ml-1 text-xs text-green-600 font-semibold px-2 py-[6px] border border-gray-300 bg-white rounded-sm hover:bg-green-50 cursor-pointer"
               onClick={() => setShowFilter(!showFilter)}
             >
               <IoFilter size="1.3em" />
@@ -232,6 +233,10 @@ const MainComponent = () => {
                 unreadCount={unreadCounts[user.id] || 0}
               />
             ))}
+
+        <div className="absolute bg-green-700 text-white rounded-full p-3 z-10 bottom-3 right-3 shadow-2xl">
+          <TbMessageCirclePlus size="1.4em" />
+        </div>
       </div>
 
       <div className="w-full h-full">
