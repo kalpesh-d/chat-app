@@ -126,7 +126,7 @@ const MainComponent = () => {
 
   return (
     <section className="flex">
-      <div className="max-w-sm w-full border-r border-gray-200 relative max-h-screen overflow-y-auto">
+      <div className="max-w-sm w-full border-r border-gray-200 relative max-h-[91vh] overflow-y-auto">
         <div className="flex gap-2 items-center h-12 bg-gray-100 px-4 justify-between border-b border-gray-200">
           <div className="flex items-center text-green-700 gap-1">
             <HiFolderArrowDown size="1em" />
