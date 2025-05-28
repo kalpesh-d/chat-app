@@ -244,7 +244,7 @@ const MainComponent = () => {
               />
             ))}
 
-        <div className="absolute bg-green-700 text-white rounded-full p-3 z-10 bottom-3 right-3 shadow-2xl">
+        <div className="fixed bg-green-700 text-white rounded-full p-3 z-50 bottom-2 left-[24rem] shadow-2xl">
           <TbMessageCirclePlus size="1.4em" />
         </div>
       </div>

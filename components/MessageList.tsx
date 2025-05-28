@@ -82,6 +82,7 @@ const MessageList = ({
   messagesEndRef,
 }: MessageListProps) => {
   let lastDate: string | null = null;
+
   return messages.map((msg, index: number) => {
     const currentDate = formatDateLabel(msg.created_at);
     const showDate = currentDate !== lastDate;
@@ -89,6 +90,7 @@ const MessageList = ({
     const isOwn = msg.sender_id === currentUser?.id;
     const isLast = index === messages.length - 1;
     const userName = isOwn ? currentUser?.full_name : selectedUser?.full_name;
+
     return (
       <React.Fragment key={msg.id}>
         {showDate && <DateDivider date={currentDate} />}
