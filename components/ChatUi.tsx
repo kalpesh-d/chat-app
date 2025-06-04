@@ -98,9 +98,9 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
   }
 
   return (
-    <div className="flex flex-col justify-around h-full bg-gray-100">
+    <div className="flex flex-col h-[calc(100vh-64px)] bg-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 bg-white text-black border-b border-gray-200">
+      <div className="flex items-center justify-between p-4 bg-white text-black border-b border-gray-200">
         <div className="flex items-center">
           <div className="w-10 h-10 rounded-full overflow-hidden">
             <Image
@@ -128,7 +128,7 @@ const ChatUi = ({ selectedUser }: ChatUiProps) => {
       <div
         ref={chatContainerRef}
         onScroll={handleScroll}
-        className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover min-h-[537px] max-h-[537px] relative"
+        className="flex-1 p-4 overflow-y-auto bg-chat-background bg-cover relative min-h-0"
       >
         <div className="flex flex-col space-y-4">
           {currentUser && (
